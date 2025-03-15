@@ -5,8 +5,16 @@
 #include <stdarg.h>
 #include <errno.h>
 
+#ifndef SYS_close
+#define SYS_close 3
+#endif
+
 int close(int fd)
 {
 	/* TODO: Implement close(). */
-	return -1;
+	int result = syscall(SYS_close, fd);
+    if (result == -1) {
+        return -1;
+    }
+    return 0;
 }

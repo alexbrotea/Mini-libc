@@ -2,11 +2,21 @@
 
 #include <sys/stat.h>
 #include <internal/syscall.h>
-#include <fcntl.h>
 #include <errno.h>
 
 int stat(const char *restrict path, struct stat *restrict buf)
 {
 	/* TODO: Implement stat(). */
-	return -1;
+    if (path == NULL || buf == NULL){
+        errno = EFAULT;
+        return -1;
+    }
+    int result = syscall(4, path, buf);
+    if (result < 0){
+        if (errno == 0 || errno != ENOENT){
+            errno = ENOENT;
+        }
+        return -1;
+    }
+    return 0;
 }
